@@ -860,28 +860,20 @@
       saveProgress(); // sonuç da kaydedilsin
     }
 
-    document.getElementById("restartBtn").onclick = () => {
-      roundNumber++;
-      startNewRound();
-    };
-
-    // 🚫 Kayıtlı ilerlemeyi tamamen sıfırla
+    // 🧹 Kayıtlı ilerlemeyi tamamen sıfırla
     document.getElementById("resetProgressBtn").onclick = () => {
       if (confirm("Kayıtlı ilerlemeni silmek istediğine emin misin?")) {
-        localStorage.removeItem("wordQuizProgress"); // sadece bu uygulamanın kaydını siler
+        localStorage.removeItem("wordQuizProgress");
         alert("Kayıt sıfırlandı. Sayfa yenilenecek.");
         location.reload();
       }
     };
 
-    
     // 🚀 Sayfa açıldığında
     window.onload = () => {
       if (loadProgress() && roundWords.length > 0) {
-        // Kayıt varsa oradan devam et
         loadQuestion();
       } else {
-        // Yoksa sıfırdan başla
         startNewRound();
       }
     };
