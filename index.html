@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Kelime Çalışma Uygulaması</title>
   <style>
-    /* 🎨 Genel sayfa tasarımı */
     body {
       font-family: Arial, sans-serif;
       background: #f7f7f7;
@@ -15,7 +14,6 @@
       height: 100vh;
       margin: 0;
     }
-
     .card, #resultPanel {
       background: #fff;
       padding: 20px;
@@ -24,7 +22,6 @@
       text-align: center;
       width: 340px;
     }
-
     h1 { font-size: 20px; margin-bottom: 10px; }
     .options {
       display: flex;
@@ -86,6 +83,18 @@
       cursor: pointer;
     }
     .restart-btn:hover { background: #27ae60; }
+
+    /* 🔴 Kayıt sıfırlama butonu */
+    #resetProgressBtn {
+      margin-top: 10px;
+      background: #e74c3c;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+    #resetProgressBtn:hover { background: #c0392b; }
   </style>
 </head>
 <body>
@@ -102,694 +111,52 @@
     <p id="score"></p>
     <div id="wrongList"></div>
     <button class="restart-btn" id="restartBtn">Yeni Tura Başla</button>
-    <button class="restart-btn" id="resetProgressBtn" style="background:#e74c3c;">Kaydı Sıfırla</button>
-
+    <button id="resetProgressBtn">Kaydı Sıfırla</button>
   </div>
 
   <script>
     const wordList = [
-      
-          { english: "Necessary", turkish: "Gerekli, zaruri, elzem" },
-          { english: "Essential", turkish: "Gerekli, zaruri, elzem" },
-          { english: "Needed", turkish: "Gerekli, zaruri, elzem" },
-          { english: "Required", turkish: "Gerekli, zaruri, elzem" },
-          { english: "Compulsory", turkish: "Gerekli, zaruri, elzem" },
-          { english: "Obligatory", turkish: "Gerekli, zaruri, elzem" },
-          { english: "Occur", turkish: "Meydana gelmek, olmak" },
-          { english: "Take place", turkish: "Meydana gelmek, olmak" },
-          { english: "Happen", turkish: "Meydana gelmek, olmak" },
-          { english: "Penetrate", turkish: "Nüfuz etmek, içine girmek" },
-          { english: "Enter", turkish: "İçine girmek, geçmek" },
-          { english: "Pass through", turkish: "İçine girmek, geçmek" },
-          { english: "Supply", turkish: "Sağlamak, temin etmek, desteklemek" },
-          { english: "Provide", turkish: "Sağlamak, temin etmek, desteklemek" },
-          { english: "Deliver", turkish: "Sağlamak, temin etmek, desteklemek" },
-          { english: "Contribute", turkish: "Sağlamak, temin etmek, desteklemek" },
-          { english: "Matter", turkish: "Madde, cisim" },
-          { english: "Substance", turkish: "Madde, cisim" },
-          { english: "Material", turkish: "Madde, cisim" },
-          { english: "Launch", turkish: "Fırlatmak (roket, uydu)" },
-          { english: "Send off", turkish: "Fırlatmak (roket, uydu)" },
-          { english: "Influence", turkish: "Etkilemek, tesir etmek" },
-          { english: "Affect", turkish: "Etkilemek, tesir etmek" },
-          { english: "Impact", turkish: "Etkilemek, tesir etmek" },
-          { english: "Growth", turkish: "Büyüme, gelişme" },
-          { english: "Development", turkish: "Büyüme, gelişme" },
-          { english: "Evaluation", turkish: "Büyüme, gelişme" },
-          { english: "Progress", turkish: "Büyüme, gelişme" },
-          { english: "Flexibility", turkish: "Esneklik, bükülebilirlik" },
-          { english: "Elasticity", turkish: "Esneklik, bükülebilirlik" },
-          { english: "Eventually", turkish: "Nihayetinde, sonunda" },
-          { english: "Finally", turkish: "Nihayetinde, sonunda" },
-          { english: "Ultimately", turkish: "Nihayetinde, sonunda" },
-          { english: "Sooner or later", turkish: "Nihayetinde, sonunda" },
-          { english: "Useful", turkish: "Faydalı, yararlı" },
-          { english: "Benefical", turkish: "Faydalı, yararlı" },
-          { english: "Helpful", turkish: "Faydalı, yararlı" },
-          { english: "Practical", turkish: "Faydalı, yararlı" },
-          { english: "Magnify", turkish: "Büyültmek, büyük göstermek" },
-          { english: "Enlarge", turkish: "Büyültmek, büyük göstermek" },
-          { english: "Formerly", turkish: "Eskiden, önceden" },
-          { english: "Previously", turkish: "Eskiden, önceden" },
-          { english: "In the past", turkish: "Eskiden, önceden" },
-          { english: "Vague", turkish: "Belirsiz, net değil, muğlak" },
-          { english: "Unclear", turkish: "Belirsiz, net değil, muğlak" },
-          { english: "Indefinite", turkish: "Belirsiz, net değil, muğlak" },
-          { english: "Ambiguous", turkish: "Belirsiz, net değil, muğlak" },
-          { english: "Enable", turkish: "İmkan tanımak, olanak sağlamak" },
-          { english: "Allow", turkish: "İmkan tanımak, olanak sağlamak" },
-          { english: "Permit", turkish: "İmkan tanımak, olanak sağlamak" },
-          { english: "Vanish", turkish: "Yok olmak, kaybolmak" },
-          { english: "Die out", turkish: "Yok olmak, kaybolmak" },
-          { english: "Disappear", turkish: "Yok olmak, kaybolmak" },
-          { english: "Wilderness", turkish: "Yaban hayat, vahşi yaşam" },
-          { english: "Uninhabited area left in its natural condition", turkish: "Yaban hayat, vahşi yaşam" },
-          { english: "Inhance", turkish: "Artırmak, geliştirmek" },
-          { english: "Improve", turkish: "Artırmak, geliştirmek" },
-          { english: "Augment", turkish: "Artırmak, geliştirmek" },
-          { english: "Increase", turkish: "Artırmak, geliştirmek" },
-          { english: "Boost", turkish: "Artırmak, geliştirmek" },
-          { english: "Develop", turkish: "Artırmak, geliştirmek" },
-          { english: "Celestial", turkish: "Gökle ilgili, göksel" },
-          { english: "Heavenly", turkish: "Gökle ilgili, göksel" },
-          { english: "Astronomical", turkish: "Gökle ilgili, göksel" },
-          { english: "Extiction", turkish: "Nesli tükenme, yok olma" },
-          { english: "Disapperance", turkish: "Nesli tükenme, yok olma" },
-          { english: "Death", turkish: "Nesli tükenme, yok olma" },
-          { english: "Gain", turkish: "Kazanmak, elde etmek" },
-          { english: "Get", turkish: "Kazanmak, elde etmek" },
-          { english: "Achieve", turkish: "Kazanmak, elde etmek" },
-          { english: "Acquire", turkish: "Kazanmak, elde etmek" },
-          { english: "Obtain", turkish: "Kazanmak, elde etmek" },
-          { english: "Initially", turkish: "Başlangıçta, ilk başlarda" },
-          { english: "At first", turkish: "Başlangıçta, ilk başlarda" },
-          { english: "Originally", turkish: "Başlangıçta, ilk başlarda" },
-          { english: "To begin with", turkish: "Başlangıçta, ilk başlarda" },
-          { english: "Pursue", turkish: "Takip etmek, izlemek, peşinden koşmak" },
-          { english: "Follow", turkish: "Takip etmek, izlemek, peşinden koşmak" },
-          { english: "Go after", turkish: "Takip etmek, izlemek, peşinden koşmak" },
-          { english: "Track", turkish: "Takip etmek, izlemek, peşinden koşmak" },
-          { english: "Reasonable", turkish: "Makul, akıllıca" },
-          { english: "Sensible", turkish: "Makul, akıllıca" },
-          { english: "Rational", turkish: "Makul, akıllıca" },
-          { english: "State", turkish: "Durum, hal" },
-          { english: "Condition", turkish: "Durum, hal" },
-          { english: "Situation", turkish: "Durum, hal" },
-          { english: "Shape", turkish: "Durum, hal" },
-          { english: "Prove", turkish: "Kanıtlamak, ispatlamak" },
-          { english: "Demonstrate", turkish: "Kanıtlamak, ispatlamak" },
-          { english: "Verify", turkish: "Kanıtlamak, ispatlamak" },
-          { english: "Ascertain", turkish: "Kanıtlamak, ispatlamak" },
-          { english: "Discard", turkish: "Atmak, gözden çıkartmak, kurtulmak" },
-          { english: "Throw away", turkish: "Atmak, gözden çıkartmak, kurtulmak" },
-          { english: "Dispose of", turkish: "Atmak, gözden çıkartmak, kurtulmak" },
-          { english: "Get rid of", turkish: "Atmak, gözden çıkartmak, kurtulmak" },
-          { english: "Knowledge", turkish: "Bilgi, ilim" },
-          { english: "Information", turkish: "Bilgi, ilim" },
-          { english: "Wisdom", turkish: "Bilgi, ilim" },
-          { english: "Education", turkish: "Bilgi, ilim" },
-          { english: "Precaution", turkish: "Önlem, tedbir" },
-          { english: "Measure", turkish: " Önlem, tedbir" },
-          { english: "Protection", turkish: " Önlem, tedbir" },
-          { english: "Repair", turkish: "Tamir etmek, onarmak" },
-          { english: "Fix", turkish: "Tamir etmek, onarmak" },
-          { english: "Overhaul", turkish: " Tamir etmek, onarmak" },
-          { english: "Primary", turkish: "Başlıca, esas" },
-          { english: "Main", turkish: "Başlıca, esas" },
-          { english: "Chief", turkish: "Başlıca, esas" },
-          { english: "Most important", turkish: "Başlıca, esas" },
-          { english: "Reduce", turkish: "Düşürmek, azaltmak" },
-          { english: "Lower", turkish: "Düşürmek, azaltmak" },
-          { english: "Lessen", turkish: "Düşürmek, azaltmak" },
-          { english: "Diminish", turkish: "Düşürmek, azaltmak" },
-          { english: "Disease", turkish: "Hastalık" },
-          { english: "Sickness", turkish: "Hastalık" },
-          { english: "Ailment", turkish: "Hastalık" },
-          { english: "Ilness", turkish: "Hastalık" },
-          { english: "Accessible", turkish: "Ulaşılabilir, erişilebilir" },
-          { english: "Available", turkish: "Ulaşılabilir, erişilebilir" },
-          { english: "Reachable", turkish: "Ulaşılabilir, erişilebilir" },
-          { english: "Handy", turkish: "Ulaşılabilir, erişilebilir" },
-          { english: "Agriculture", turkish: "Tarım, ziraat" },
-          { english: "Farming", turkish: "Tarım, ziraat" },
-          { english: "Cultivation", turkish: "Tarım, ziraat" },
-          { english: "Annual", turkish: "Yıllık" },
-          { english: "Recommend", turkish: "Tavsiye etmek, önermek" },
-          { english: "Suggest", turkish: "Tavsiye etmek, önermek" },
-          { english: "Advise", turkish: "Tavsiye etmek, önermek" },
-          { english: "Vary", turkish: "Farklılık göstermek, değişmek" },
-          { english: "Change", turkish: "Farklılık göstermek, değişmek" },
-          { english: "Alter", turkish: "Farklılık göstermek, değişmek" },
-          { english: "Approximately", turkish: "Takriben, yaklaşık" },
-          { english: "Around", turkish: "Takriben, yaklaşık" },
-          { english: "About", turkish: "Takriben, yaklaşık" },
-          { english: "roughly", turkish: "Takriben, yaklaşık" },
-          { english: "Principle", turkish: "Prensip, ilke, kaide" },
-          { english: "Rule", turkish: "Prensip, ilke, kaide" },
-          { english: "Theory", turkish: "Prensip, ilke, kaide" },
-          { english: "Notion", turkish: "Prensip, ilke, kaide" },
-          { english: "Monitor", turkish: "İzlemek, gözlemlemek" },
-          { english: "Watch", turkish: "İzlemek, gözlemlemek" },
-          { english: "Observe", turkish: "İzlemek, gözlemlemek" },
-          { english: "Scarce", turkish: "Kısıtlı, yetersiz, kıt" },
-          { english: "Limited", turkish: "Kısıtlı, yetersiz, kıt" },
-          { english: "Indequate", turkish: "Kısıtlı, yetersiz, kıt" },
-          { english: "Insufficient", turkish: "Kısıtlı, yetersiz, kıt" },
-          { english: "Fluctuation", turkish: "Dalgalanma, değişme" },
-          { english: "Change", turkish: "Dalgalanma, değişme" },
-          { english: "Variation", turkish: "Dalgalanma, değişme" },
-          { english: "Product", turkish: "Ürün, sonuç" },
-          { english: "Result", turkish: "Ürün, sonuç" },
-          { english: "Outcome", turkish: "Ürün, sonuç" },
-          { english: "Item", turkish: "Ürün, sonuç" },
-          { english: "Invent", turkish: "İcat etmek, keşfetmek" },
-          { english: "Create", turkish: "İcat etmek, keşfetmek" },
-          { english: "Discover", turkish: "İcat etmek, keşfetmek" },
-          { english: "Devise", turkish: "İcat etmek, keşfetmek" },
-          { english: "Expectional", turkish: "Fevkalade, istisnai, olağanüstü" },
-          { english: "Excellent", turkish: "Fevkalade, istisnai, olağanüstü" },
-          { english: "Special", turkish: "Fevkalade, istisnai, olağanüstü" },
-          { english: "Extraordinary", turkish: "Fevkalade, istisnai, olağanüstü" },
-          { english: "Illustrate", turkish: "Göstermek, sergilemek, resimlerle açıklamak" },
-          { english: "Show", turkish: "Göstermek, sergilemek, resimlerle açıklamak" },
-          { english: "Exhibit", turkish: "Göstermek, sergilemek, resimlerle açıklamak" },
-          { english: "Explain with pictures", turkish: "Göstermek, sergilemek, resimlerle açıklamak" },
-          { english: "Opportunity", turkish: "Fırsat, şans, olanak" },
-          { english: "Chance", turkish: "Fırsat, şans, olanak" },
-          { english: "Investigate", turkish: "İncelemek, araştırmak" },
-          { english: "Examine", turkish: "İncelemek, araştırmak" },
-          { english: "Look into", turkish: "İncelemek, araştırmak" },
-          { english: "Explore", turkish: "İncelemek, araştırmak" },
-          { english: "likelihood", turkish: "Olabilirlik, ihtimal" },
-          { english: "likelihood", turkish: "Olabilirlik, ihtimal" },
-          { english: "Probability", turkish: "Olabilirlik, ihtimal" },
-          { english: "Possibility", turkish: "Olabilirlik, ihtimal" },
-          { english: "Prospect", turkish: "Olabilirlik, ihtimal" },
-          { english: "Primitive", turkish: "İlkel, basit, eski çağa ait" },
-          { english: "Simple", turkish: "İlkel, basit, eski çağa ait" },
-          { english: "Uncomplicated", turkish: "İlkel, basit, eski çağa ait" },
-          { english: "Ancient", turkish: "İlkel, basit, eski çağa ait" },
-          { english: "Regulation", turkish: "Kural, kaide, düzenleme" },
-          { english: "Rule", turkish: "Kural, kaide, düzenleme" },
-          { english: "Directive", turkish: "Kural, kaide, düzenleme" },
-          { english: "Guideline", turkish: "Kural, kaide, düzenleme" },
-          { english: "Reason", turkish: "Neden, sebep" },
-          { english: "Cause", turkish: "Neden, sebep" },
-          { english: "Basis", turkish: "Neden, sebep" },
-          { english: "Especially", turkish: "Özellikle, bilhassa" },
-          { english: "Notably", turkish: "Özellikle, bilhassa" },
-          { english: "Particulary", turkish: "Özellikle, bilhassa" },
-          { english: "Decade", turkish: "On yıl" },
-          { english: "A ten year period", turkish: "On yıl" },
-          { english: "Purpose", turkish: "Amaç, gaye" },
-          { english: "Aim", turkish: "Amaç, gaye" },
-          { english: "Target", turkish: "Amaç, gaye" },
-          { english: "Goal", turkish: "Amaç, gaye" },
-          { english: "Objective", turkish: "Amaç, gaye" },
-          { english: "Significantly", turkish: "Önemli ölçüde" },
-          { english: "Substantially", turkish: "Önemli ölçüde" },
-          { english: "Considerably", turkish: "Önemli ölçüde" },
-          { english: "Survey", turkish: "Araştırma, inceleme, anket" },
-          { english: "Review", turkish: "Araştırma, inceleme, anket" },
-          { english: "Study", turkish: "Araştırma, inceleme, anket" },
-          { english: "Examination", turkish: "Araştırma, inceleme, anket" },
-          { english: "Investigation", turkish: "Araştırma, inceleme, anket" },
-          { english: "Inspection", turkish: "Araştırma, inceleme, anket" },
-          { english: "Detect", turkish: "Teşhis etmek, belirlemek, algılamak" },
-          { english: "Notice", turkish: "Teşhis etmek, belirlemek, algılamak" },
-          { english: "Identify", turkish: "Teşhis etmek, belirlemek, algılamak" },
-          { english: "Discover", turkish: "Teşhis etmek, belirlemek, algılamak" },
-          { english: "Perceive", turkish: "Teşhis etmek, belirlemek, algılamak" },
-          { english: "Emerge", turkish: "Ortaya çıkmak" },
-          { english: "Come out", turkish: "Ortaya çıkmak" },
-          { english: "Appear", turkish: "Ortaya çıkmak" },
-          { english: "Come into view", turkish: "Ortaya çıkmak" },
-          { english: "Diverse", turkish: "Çeşitli, farklı" },
-          { english: "Various", turkish: "Çeşitli, farklı" },
-          { english: "Different", turkish: "Çeşitli, farklı" },
-          { english: "Pesticide", turkish: "Böcek ilacı" },
-          { english: "Insecticide", turkish: "Böcek ilacı" },
-          { english: "Intensify", turkish: "Yoğunlaştırmak, artırmak, güçlendirmek" },
-          { english: "Strengthen", turkish: "Yoğunlaştırmak, artırmak, güçlendirmek" },
-          { english: "Escelate", turkish: "Yoğunlaştırmak, artırmak, güçlendirmek" },
-          { english: "Step up", turkish: "Yoğunlaştırmak, artırmak, güçlendirmek" },
-          { english: "Boost", turkish: "Yoğunlaştırmak, artırmak, güçlendirmek" },
-          { english: "Familiar", turkish: "Aşina, tanıdık" },
-          { english: "Recognazible", turkish: "Aşina, tanıdık" },
-          { english: "Acquainted", turkish: "Aşina, tanıdık" },
-          { english: "Particularly", turkish: "Özellikle, bilhassa" },
-          { english: "Especially", turkish: "Özellikle, bilhassa" },
-          { english: "Notably", turkish: "Özellikle, bilhassa" },
-          { english: "Inadequate", turkish: "Yetersiz, noksan, eksik" },
-          { english: "Insufficient", turkish: "Yetersiz, noksan, eksik" },
-          { english: "Scarse", turkish: "Yetersiz, noksan, eksik" },
-          { english: "Drift", turkish: "Sürüklenme, kayma" },
-          { english: "Float", turkish: "Sürüklenme, kayma" },
-          { english: "Flow", turkish: "Sürüklenme, kayma" },
-          { english: "Glide", turkish: "Sürüklenme, kayma" },
-          { english: "Prevention", turkish: "Önleme, engelleme" },
-          { english: "Deterrence", turkish: "Önleme, engelleme" },
-          { english: "Inhibition", turkish: "Önleme, engelleme" },
-          { english: "Hindrance", turkish: "Önleme, engelleme" },
-          { english: "Observation", turkish: "Gözlem, izleme" },
-          { english: "Scrutiny", turkish: "Gözlem, izleme" },
-          { english: "Watching", turkish: "Gözlem, izleme" },
-          { english: "Inspection", turkish: "Gözlem, izleme" },
-          { english: "Demonstrate", turkish: "Göstermek, ispatlamak" },
-          { english: "Display", turkish: "Göstermek, ispatlamak" },
-          { english: "Show", turkish: "Göstermek, ispatlamak" },
-          { english: "Prove", turkish: "Göstermek, ispatlamak" },
-          { english: "Compound", turkish: "Alaşım, bileşik" },
-          { english: "Mixture", turkish: "Alaşım, bileşik" },
-          { english: "Grow", turkish: "Büyümek, yetişmek, gelişmek" },
-          { english: "Produce", turkish: "Büyümek, yetişmek, gelişmek" },
-          { english: "Develop", turkish: "Büyümek, yetişmek, gelişmek" },
-          { english: "Harsh", turkish: "Sert, ağır, kaba" },
-          { english: "Severe", turkish: "Sert, ağır, kaba" },
-          { english: "Bleak", turkish: "Sert, ağır, kaba" },
-          { english: "Austere", turkish: "Sert, ağır, kaba" },
-          { english: "Sample", turkish: "Numune, örnek" },
-          { english: "Example", turkish: "Numune, örnek" },
-          { english: "Tester", turkish: "Numune, örnek" },
-          { english: "Model", turkish: "Numune, örnek" },
-          { english: "Discovery", turkish: "Buluş, keşif" },
-          { english: "Detection", turkish: "Buluş, keşif" },
-          { english: "Finding", turkish: "Buluş, keşif" },
-          { english: "Unearthing", turkish: "Buluş, keşif" },
-          { english: "Eliminate", turkish: "Ortadan kaldırmak, bertaraf etmek, -den kurtulmak" },
-          { english: "Get rid of", turkish: "Ortadan kaldırmak, bertaraf etmek, -den kurtulmak" },
-          { english: "Remove", turkish: "Ortadan kaldırmak, bertaraf etmek, -den kurtulmak" },
-          { english: "Eradicate", turkish: "Ortadan kaldırmak, bertaraf etmek, -den kurtulmak" },
-          { english: "Link", turkish: "İlişki, bağ" },
-          { english: "Connection", turkish: "İlişki, bağ" },
-          { english: "Relation", turkish: "İlişki, bağ" },
-          { english: "Association", turkish: "İlişki, bağ" },
-          { english: "Bond", turkish: "İlişki, bağ" },
-          { english: "Increase", turkish: "Artırmak, yükseltmek" },
-          { english: "Boost", turkish: "Artırmak, yükseltmek" },
-          { english: "Amplify", turkish: "Artırmak, yükseltmek" },
-          { english: "Enhance", turkish: "Artırmak, yükseltmek" },
-          { english: "Outcome", turkish: "Netice, sonuç" },
-          { english: "Consequence", turkish: "Netice, sonuç" },
-          { english: "Result", turkish: "Netice, sonuç" },
-          { english: "Reliability", turkish: "Güvenilirlik, tutarlılık" },
-          { english: "Dependability", turkish: "Güvenilirlik, tutarlılık" },
-          { english: "Consistency", turkish: "Güvenilirlik, tutarlılık" },
-          { english: "Heighten", turkish: "Artırmak, yükseltmek" },
-          { english: "Intensify", turkish: "Artırmak, yükseltmek" },
-          { english: "Amplify", turkish: "Artırmak, yükseltmek" },
-          { english: "Increase", turkish: "Artırmak, yükseltmek" },
-          { english: "Enhance", turkish: "Artırmak, yükseltmek" },
-          { english: "Gather", turkish: "Toplanmak, bir araya gelmek" },
-          { english: "Get togetger", turkish: "Toplanmak, bir araya gelmek" },
-          { english: "Assemble", turkish: "Toplanmak, bir araya gelmek" },
-          { english: "Desert", turkish: "Çöl" },
-          { english: "Wasteland", turkish: "Çöl" },
-          { english: "Barren region", turkish: "Çöl" },
-          { english: "Layer", turkish: "Katman, tabaka" },
-          { english: "Sheet", turkish: "Katman, tabaka" },
-          { english: "Cover", turkish: "Katman, tabaka" },
-          { english: "Plausible", turkish: "Makul, akla yatkın" },
-          { english: "Reasonable", turkish: "Makul, akla yatkın" },
-          { english: "Sensible", turkish: "Makul, akla yatkın" },
-          { english: "Logical", turkish: "Makul, akla yatkın" },
-          { english: "Contain", turkish: "İçermek, ihtiva etmek" },
-          { english: "Hold", turkish: "İçermek, ihtiva etmek" },
-          { english: "Have", turkish: "İçermek, ihtiva etmek" },
-          { english: "Include", turkish: "İçermek, ihtiva etmek" },
-          { english: "Policy", turkish: "Politika, hareket tarzı, plan" },
-          { english: "Course of action", turkish: "Politika, hareket tarzı, plan" },
-          { english: "Strategy", turkish: "Politika, hareket tarzı, plan" },
-          { english: "Plan", turkish: "Politika, hareket tarzı, plan" },
-          { english: "Menace", turkish: "Tehdit, tehlike" },
-          { english: "Threat", turkish: "Tehdit, tehlike" },
-          { english: "Danger", turkish: "Tehdit, tehlike" },
-          { english: "Hazard", turkish: "Tehdit, tehlike" },
-          { english: "Peril", turkish: "Tehdit, tehlike" },
-          { english: "Save", turkish: "Kurtarmak, biriktirmek, korumak" },
-          { english: "Protect", turkish: "Kurtarmak, biriktirmek, korumak" },
-          { english: "Keep", turkish: "Kurtarmak, biriktirmek, korumak" },
-          { english: "Hold", turkish: "Kurtarmak, biriktirmek, korumak" },
-          { english: "Combine", turkish: "Birleşmek, birleştirmek, bir araya gelmek" },
-          { english: "Unite", turkish: "Birleşmek, birleştirmek, bir araya gelmek" },
-          { english: "Join", turkish: "Birleşmek, birleştirmek, bir araya gelmek" },
-          { english: "Merge", turkish: "Birleşmek, birleştirmek, bir araya gelmek" },
-          { english: "Obtain", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Get hold of", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Gain", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Attain", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Acquire", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Achieve", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Fume", turkish: "Duman, gaz" },
-          { english: "Emission", turkish: "Duman, gaz" },
-          { english: "Smoke", turkish: "Duman, gaz" },
-          { english: "Gas", turkish: "Duman, gaz" },
-          { english: "Strict", turkish: "Katı, sıkı, sert" },
-          { english: "Harsh", turkish: "Katı, sıkı, sert" },
-          { english: "Firm", turkish: "Katı, sıkı, sert" },
-          { english: "Severe", turkish: "Katı, sıkı, sert" },
-          { english: "Improve", turkish: "İyileştirmek, geliştirmek, ilerletmek" },
-          { english: "Get better", turkish: "İyileştirmek, geliştirmek, ilerletmek" },
-          { english: "Enhance", turkish: "İyileştirmek, geliştirmek, ilerletmek" },
-          { english: "Advance", turkish: "İyileştirmek, geliştirmek, ilerletmek" },
-          { english: "Determine", turkish: "Saptamak, belirlemek" },
-          { english: "Find out", turkish: "Saptamak, belirlemek" },
-          { english: "Ascertain", turkish: "Saptamak, belirlemek" },
-          { english: "Uncover", turkish: "Saptamak, belirlemek" },
-          { english: "Relatively", turkish: "Nispeten, oranla" },
-          { english: "Comparatively", turkish: "Nispeten, oranla" },
-          { english: "Moderately", turkish: "Nispeten, oranla" },
-          { english: "Mild", turkish: "Ilıman, hafif, yumuşak" },
-          { english: "Slight", turkish: "Ilıman, hafif, yumuşak" },
-          { english: "Minor", turkish: "Ilıman, hafif, yumuşak" },
-          { english: "Unimportant", turkish: "Ilıman, hafif, yumuşak" },
-          { english: "Affect", turkish: "Etkilemek, tesir etmek" },
-          { english: "Influence", turkish: "Etkilemek, tesir etmek" },
-          { english: "Impact", turkish: "Etkilemek, tesir etmek" },
-          { english: "Currently", turkish: "Şu an, mevcut durumda" },
-          { english: "At present", turkish: "Şu an, mevcut durumda" },
-          { english: "Now", turkish: "Şu an, mevcut durumda" },
-          { english: "At this time", turkish: "Şu an, mevcut durumda" },
-          { english: "Presently", turkish: "Şu an, mevcut durumda" },
-          { english: "Evaluate", turkish: "Kıymetlendirmek, değerlendirmek" },
-          { english: "Assess", turkish: "Şu an, mevcut durumda" },
-          { english: "Appraise", turkish: "Şu an, mevcut durumda" },
-          { english: "Ignore", turkish: "İhmal etmek, görmezden gelmek" },
-          { english: "Pay no attention", turkish: "İhmal etmek, görmezden gelmek" },
-          { english: "Overlook", turkish: "İhmal etmek, görmezden gelmek" },
-          { english: "Take no account", turkish: "İhmal etmek, görmezden gelmek" },
-          { english: "Common", turkish: "Yaygın, bilinen" },
-          { english: "Widespread", turkish: "Yaygın, bilinen" },
-          { english: "General", turkish: "Yaygın, bilinen" },
-          { english: "Familiar", turkish: "Yaygın, bilinen" },
-          { english: "Hazardous", turkish: "Tehlikeli, riskli" },
-          { english: "Dangerous", turkish: "Tehlikeli, riskli" },
-          { english: "Risky", turkish: "Tehlikeli, riskli" },
-          { english: "Perilous", turkish: "Tehlikeli, riskli" },
-          { english: "Obvious", turkish: "Açık, bariz, aşikar, net" },
-          { english: "Clear", turkish: "Açık, bariz, aşikar, net" },
-          { english: "Evident", turkish: "Açık, bariz, aşikar, net" },
-          { english: "Apparent", turkish: "Açık, bariz, aşikar, net" },
-          { english: "Pollution", turkish: "Kirlilik" },
-          { english: "Contamination", turkish: "Kirlilik" },
-          { english: "Toxic waste", turkish: "Kirlilik" },
-          { english: "Partially", turkish: "Kısmen, bir dereceye kadar" },
-          { english: "To some extent", turkish: "Kısmen, bir dereceye kadar" },
-          { english: "Somewhat", turkish: "Kısmen, bir dereceye kadar" },
-          { english: "Enormous", turkish: "Muazzam, kocaman, devasa" },
-          { english: "Huge", turkish: "Muazzam, kocaman, devasa" },
-          { english: "Massive", turkish: "Muazzam, kocaman, devasa" },
-          { english: "Giant", turkish: "Muazzam, kocaman, devasa" },
-          { english: "Colossal", turkish: "Muazzam, kocaman, devasa" },
-          { english: "Tremendeus", turkish: "Muazzam, kocaman, devasa" },
-          { english: "Develop", turkish: "Gelişmek, geliştirmek, ilerlemek, ilerletmek" },
-          { english: "Advance", turkish: "Gelişmek, geliştirmek, ilerlemek, ilerletmek" },
-          { english: "Progress", turkish: "Gelişmek, geliştirmek, ilerlemek, ilerletmek" },
-          { english: "Enhance", turkish: "Gelişmek, geliştirmek, ilerlemek, ilerletmek" },
-          { english: "Improve", turkish: "Gelişmek, geliştirmek, ilerlemek, ilerletmek" },
-          { english: "Task", turkish: "Görev, vazife, iş" },
-          { english: "Duty", turkish: "Görev, vazife, iş" },
-          { english: "Mission", turkish: "Görev, vazife, iş" },
-          { english: "Assignment", turkish: "Görev, vazife, iş" },
-          { english: "Job", turkish: "Görev, vazife, iş" },
-          { english: "Decrease", turkish: "Azalmak, azaltmak" },
-          { english: "Lower", turkish: "Azalmak, azaltmak" },
-          { english: "Lessen", turkish: "Azalmak, azaltmak" },
-          { english: "Reduce", turkish: "Azalmak, azaltmak" },
-          { english: "Diminish", turkish: "Azalmak, azaltmak" },
-          { english: "Impact", turkish: "Etki, tesir" },
-          { english: "Influence", turkish: "Etki, tesir" },
-          { english: "Effect", turkish: "Etki, tesir" },
-          { english: "Solely", turkish: "Sadece, yalnızca" },
-          { english: "Exclusively", turkish: "Sadece, yalnızca" },
-          { english: "Only", turkish: "Sadece, yalnızca" },
-          { english: "Merely", turkish: "Sadece, yalnızca" },
-          { english: "Just", turkish: "Sadece, yalnızca" },
-          { english: "Regulate", turkish: "Düzenlemek, ayarlamak" },
-          { english: "Control", turkish: "Düzenlemek, ayarlamak" },
-          { english: "Adjust", turkish: "Düzenlemek, ayarlamak" },
-          { english: "Set", turkish: "Düzenlemek, ayarlamak" },
-          { english: "Lack of", turkish: "Yoksunluk, eksiklik, olmama" },
-          { english: "Absence", turkish: "Yoksunluk, eksiklik, olmama" },
-          { english: "Non-existence", turkish: "Yoksunluk, eksiklik, olmama" },
-          { english: "Deficiency", turkish: "Yoksunluk, eksiklik, olmama" },
-          { english: "Scarcity", turkish: "Yoksunluk, eksiklik, olmama" },
-          { english: "Benefit", turkish: "Fayda sağlamak, yararlanmak, fayda, yarar" },
-          { english: "Take advantage of", turkish: "Fayda sağlamak, yararlanmak, fayda, yarar" },
-          { english: "Advantage", turkish: "Fayda sağlamak, yararlanmak, fayda, yarar" },
-          { english: "Profit", turkish: "Fayda sağlamak, yararlanmak, fayda, yarar" },
-          { english: "Condition", turkish: "Koşul, durum" },
-          { english: "State", turkish: "Koşul, durum" },
-          { english: "Form", turkish: "Koşul, durum" },
-          { english: "Avaliable", turkish: "Mevcut, elde olan, ulaşılabilir" },
-          { english: "Obtainable", turkish: "Mevcut, elde olan, ulaşılabilir" },
-          { english: "Accessible", turkish: "Mevcut, elde olan, ulaşılabilir" },
-          { english: "On hand", turkish: "Mevcut, elde olan, ulaşılabilir" },
-          { english: "Assemble", turkish: "Toplamak, toplanmak, bir araya gelmek" },
-          { english: "Bring together", turkish: "Toplamak, toplanmak, bir araya gelmek" },
-          { english: "Collect", turkish: "Toplamak, toplanmak, bir araya gelmek" },
-          { english: "Accumulate", turkish: "Toplamak, toplanmak, bir araya gelmek" },
-          { english: "Amass", turkish: "Toplamak, toplanmak, bir araya gelmek" },
-          { english: "Gather", turkish: "Toplamak, toplanmak, bir araya gelmek" },
-          { english: "Focus on", turkish: "Odaklanmak" },
-          { english: "Concentrate on", turkish: "Odaklanmak" },
-          { english: "Center", turkish: "Odaklanmak" },
-          { english: "Precipitation", turkish: "Yağış" },
-          { english: "Fainfall", turkish: "Yağış" },
-          { english: "Fail", turkish: "Başaramamak, başarısız olmak" },
-          { english: "Be unsuccessful", turkish: "Başaramamak, başarısız olmak" },
-          { english: "Severe", turkish: "Şiddetli, sert" },
-          { english: "Harsh", turkish: "Şiddetli, sert" },
-          { english: "Strict", turkish: "Şiddetli, sert" },
-          { english: "Acute", turkish: "Şiddetli, sert" },
-          { english: "Prone to", turkish: "Eğimli, yatkın" },
-          { english: "Predisposed to", turkish: "Eğimli, yatkın" },
-          { english: "Susceptible to", turkish: "Eğimli, yatkın" },
-          { english: "Inclined to", turkish: "Eğimli, yatkın" },
-          { english: "Alignment", turkish: "Hizalama, ayar, sıra" },
-          { english: "Arrangement", turkish: "Hizalama, ayar, sıra" },
-          { english: "Position", turkish: "Hizalama, ayar, sıra" },
-          { english: "Placement", turkish: "Hizalama, ayar, sıra" },
-          { english: "Proper", turkish: "Uygun, münasip, düzgün" },
-          { english: "Good", turkish: "Uygun, münasip, düzgün" },
-          { english: "Correct", turkish: "Uygun, münasip, düzgün" },
-          { english: "Appropriate", turkish: "Uygun, münasip, düzgün" },
-          { english: "Suitable", turkish: "Uygun, münasip, düzgün" },
-          { english: "Support", turkish: "Destek, desteklemek" },
-          { english: "Provide", turkish: "Destek, desteklemek" },
-          { english: "Cack up", turkish: "Destek, desteklemek" },
-          { english: "Crucial", turkish: "Çok önemli, mühim" },
-          { english: "Vital", turkish: "Çok önemli, mühim" },
-          { english: "Critical", turkish: "Çok önemli, mühim" },
-          { english: "Essential", turkish: "Çok önemli, mühim" },
-          { english: "Fundamental", turkish: "Çok önemli, mühim" },
-          { english: "Important", turkish: "Çok önemli, mühim" },
-          { english: "Trait", turkish: "Özellik, nitelik" },
-          { english: "Characteristic", turkish: "Özellik, nitelik" },
-          { english: "Feature", turkish: "Özellik, nitelik" },
-          { english: "Quality", turkish: "Özellik, nitelik" },
-          { english: "Concerned", turkish: "Kaygılı, endişeli" },
-          { english: "Worried", turkish: "Kaygılı, endişeli" },
-          { english: "Afraid", turkish: "Kaygılı, endişeli" },
-          { english: "Disturbed", turkish: "Kaygılı, endişeli" },
-          { english: "Requirement", turkish: "Gereksinim, ihtiyaç, zorunluluk" },
-          { english: "Obligation", turkish: "Gereksinim, ihtiyaç, zorunluluk" },
-          { english: "Condition", turkish: "Gereksinim, ihtiyaç, zorunluluk" },
-          { english: "Prerequisite", turkish: "Gereksinim, ihtiyaç, zorunluluk" },
-          { english: "Necessity", turkish: "Gereksinim, ihtiyaç, zorunluluk" },
-          { english: "Deteriorate", turkish: "Kötüleşmek, kötüye gitmek, bozulmak" },
-          { english: "Get worse", turkish: "Kötüleşmek, kötüye gitmek, bozulmak" },
-          { english: "Worsen", turkish: "Kötüleşmek, kötüye gitmek, bozulmak" },
-          { english: "Decline", turkish: "Kötüleşmek, kötüye gitmek, bozulmak" },
-          { english: "Flourish", turkish: "İlerlemek, gelişmek" },
-          { english: "Thrive", turkish: "İlerlemek, gelişmek" },
-          { english: "Grow", turkish: "İlerlemek, gelişmek" },
-          { english: "Increase", turkish: "İlerlemek, gelişmek" },
-          { english: "Prosper", turkish: "İlerlemek, gelişmek" },
-          { english: "Adequate", turkish: "Yeterli, kafi" },
-          { english: "Sufficient", turkish: "Yeterli, kafi" },
-          { english: "Enough", turkish: "Yeterli, kafi" },
-          { english: "Give rise to", turkish: "Sebep olmak, yol açmak" },
-          { english: "Cause", turkish: "Sebep olmak, yol açmak" },
-          { english: "Bring about", turkish: "Sebep olmak, yol açmak" },
-          { english: "Lead to", turkish: "Sebep olmak, yol açmak" },
-          { english: "Attempt", turkish: "Teşebbüs etmek, çabalamak, çalışmak, girişim" },
-          { english: "Try to", turkish: "Teşebbüs etmek, çabalamak, çalışmak, girişim" },
-          { english: "Aspire to", turkish: "Teşebbüs etmek, çabalamak, çalışmak, girişim" },
-          { english: "Endeavour to", turkish: "Teşebbüs etmek, çabalamak, çalışmak, girişim" },
-          { english: "Aim to", turkish: "Teşebbüs etmek, çabalamak, çalışmak, girişim" },
-          { english: "Deadly", turkish: "Öldürücü, ölümcül, yok edici" },
-          { english: "Lethal", turkish: "Öldürücü, ölümcül, yok edici" },
-          { english: "Fatal", turkish: "Öldürücü, ölümcül, yok edici" },
-          { english: "Consequence", turkish: "Sonuç, netice" },
-          { english: "Result", turkish: "Sonuç, netice" },
-          { english: "Outcome", turkish: "Sonuç, netice" },
-          { english: "Wreck", turkish: "Enkaz, harabe, kaza" },
-          { english: "Crash", turkish: "Enkaz, harabe, kaza" },
-          { english: "Collision", turkish: "Enkaz, harabe, kaza" },
-          { english: "Accident", turkish: "Enkaz, harabe, kaza" },
-          { english: "Constructive", turkish: "Yapıcı, olumlu, yardımcı" },
-          { english: "Positive", turkish: "Yapıcı, olumlu, yardımcı" },
-          { english: "Helpful", turkish: "Yapıcı, olumlu, yardımcı" },
-          { english: "Productive", turkish: "Yapıcı, olumlu, yardımcı" },
-          { english: "Useful", turkish: "Yapıcı, olumlu, yardımcı" },
-          { english: "Beneficial", turkish: "Yapıcı, olumlu, yardımcı" },
-          { english: "Promote", turkish: "Teşvik etmek, desteklemek, ilerletmek" },
-          { english: "Encourage", turkish: "Teşvik etmek, desteklemek, ilerletmek" },
-          { english: "Advance", turkish: "Teşvik etmek, desteklemek, ilerletmek" },
-          { english: "Further", turkish: "Teşvik etmek, desteklemek, ilerletmek" },
-          { english: "Raise", turkish: "Teşvik etmek, desteklemek, ilerletmek" },
-          { english: "Drought", turkish: "Kuraklık, susuzluk" },
-          { english: "Lack of rain", turkish: "Kuraklık, susuzluk" },
-          { english: "Incidence", turkish: "Olay, vaka, görülme sıklığı" },
-          { english: "Event", turkish: "Olay, vaka, görülme sıklığı" },
-          { english: "Occurrence", turkish: "Olay, vaka, görülme sıklığı" },
-          { english: "Occasion", turkish: "Olay, vaka, görülme sıklığı" },
-          { english: "Release", turkish: "Yayılmak, salınmak" },
-          { english: "Let out", turkish: "Yayılmak, salınmak" },
-          { english: "Free", turkish: "Yayılmak, salınmak" },
-          { english: "Emit", turkish: "Yayılmak, salınmak" },
-          { english: "Give off", turkish: "Yayılmak, salınmak" },
-          { english: "Accurately", turkish: "Tam olarak, doğru olarak" },
-          { english: "Precisely", turkish: "Tam olarak, doğru olarak" },
-          { english: "Exactly", turkish: "Tam olarak, doğru olarak" },
-          { english: "Correctly", turkish: "Tam olarak, doğru olarak" },
-          { english: "Truthfully", turkish: "Tam olarak, doğru olarak" },
-          { english: "Essential", turkish: "Zaruri, zorunlu, elzem" },
-          { english: "Vital", turkish: "Zaruri, zorunlu, elzem" },
-          { english: "Indispensable", turkish: "Zaruri, zorunlu, elzem" },
-          { english: "Important", turkish: "Zaruri, zorunlu, elzem" },
-          { english: "Crucial", turkish: "Zaruri, zorunlu, elzem" },
-          { english: "Application", turkish: "Uygulama, tatbik" },
-          { english: "Use", turkish: "Uygulama, tatbik" },
-          { english: "Function", turkish: "Uygulama, tatbik" },
-          { english: "Biodiversity", turkish: "Biyolojik çeşitlilik" },
-          { english: "Range of ogranisms in environment", turkish: "Biyolojik çeşitlilik" },
-          { english: "Gradually", turkish: "Yavaş yavaş, gitgide" },
-          { english: "Bit by bit", turkish: "Yavaş yavaş, gitgide" },
-          { english: "Slowly", turkish: "Yavaş yavaş, gitgide" },
-          { english: "Progressively", turkish: "Yavaş yavaş, gitgide" },
-          { english: "Rapid", turkish: "Hızlı, ani, çabuk" },
-          { english: "Fast", turkish: "Hızlı, ani, çabuk" },
-          { english: "Quick", turkish: "Hızlı, ani, çabuk" },
-          { english: "Speedy", turkish: "Hızlı, ani, çabuk" },
-          { english: "Swift", turkish: "Hızlı, ani, çabuk" },
-          { english: "Component", turkish: "Parça, bileşen" },
-          { english: "Constituent", turkish: "Parça, bileşen" },
-          { english: "Module", turkish: "Parça, bileşen" },
-          { english: "Section", turkish: "Parça, bileşen" },
-          { english: "Part", turkish: "Parça, bileşen" },
-          { english: "Ignition", turkish: "Ateşleme, başlatma, tutuşturma" },
-          { english: "Explosion", turkish: "Ateşleme, başlatma, tutuşturma" },
-          { english: "Discharge", turkish: "Ateşleme, başlatma, tutuşturma" },
-          { english: "Start", turkish: "Ateşleme, başlatma, tutuşturma" },
-          { english: "Alter", turkish: "Değiştirmek" },
-          { english: "Change", turkish: "Değiştirmek" },
-          { english: "Modify", turkish: "Değiştirmek" },
-          { english: "Amend", turkish: "Değiştirmek" },
-          { english: "Disappear", turkish: "Yok olmak, kaybolmak" },
-          { english: "Vanish", turkish: "Yok olmak, kaybolmak" },
-          { english: "Die out", turkish: "Yok olmak, kaybolmak" },
-          { english: "Acquire", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Obtain", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Get hold of", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Gain", turkish: "Edinmek, elde etmek, kazanmak" },
-          { english: "Moderate", turkish: "Makul, ılımlı, ölçülü, orta seviye" },
-          { english: "Reasonable", turkish: "Makul, ılımlı, ölçülü, orta seviye" },
-          { english: "Modest", turkish: "Makul, ılımlı, ölçülü, orta seviye" },
-          { english: "Medium", turkish: "Makul, ılımlı, ölçülü, orta seviye" },
-          { english: "Normal", turkish: "Makul, ılımlı, ölçülü, orta seviye" },
-          { english: "Emit", turkish: "Yaymak, salmak, saçmak" },
-          { english: "Release", turkish: "Yaymak, salmak, saçmak" },
-          { english: "Give off", turkish: "Yaymak, salmak, saçmak" },
-          { english: "Send out", turkish: "Yaymak, salmak, saçmak" },
-          { english: "Inconsistent", turkish: "İstikrarsız, tutarsız" },
-          { english: "Conflicting", turkish: "İstikrarsız, tutarsız" },
-          { english: "Contradictory", turkish: "İstikrarsız, tutarsız" },
-          { english: "Incompatible", turkish: "İstikrarsız, tutarsız" },
-          { english: "Implement", turkish: "Uygulamak, ifa etmek, yapmak" },
-          { english: "Perform", turkish: "Uygulamak, ifa etmek, yapmak" },
-          { english: "Carry out", turkish: "Uygulamak, ifa etmek, yapmak" },
-          { english: "Apply", turkish: "Uygulamak, ifa etmek, yapmak" },
-          { english: "Highlight", turkish: "Vurgulamak, altını çizmek, dikkati çekmek" },
-          { english: "Emphasize", turkish: "Vurgulamak, altını çizmek, dikkati çekmek" },
-          { english: "Draw attention to", turkish: "Vurgulamak, altını çizmek, dikkati çekmek" },
-          { english: "Underline", turkish: "Vurgulamak, altını çizmek, dikkati çekmek" },
-          { english: "Stress", turkish: "Vurgulamak, altını çizmek, dikkati çekmek" },
-          { english: "Facilitate", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
-          { english: "Make easy", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
-          { english: "Ease", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
-          { english: "Make possible", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
-          { english: "Enable", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
-          { english: "Simplify", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
-
-      
+      { english: "Necessary", turkish: "Gerekli, zaruri, elzem" },
+      { english: "Essential", turkish: "Gerekli, zaruri, elzem" },
+      { english: "Needed", turkish: "Gerekli, zaruri, elzem" },
+      { english: "Required", turkish: "Gerekli, zaruri, elzem" },
+      { english: "Compulsory", turkish: "Gerekli, zaruri, elzem" },
+      { english: "Obligatory", turkish: "Gerekli, zaruri, elzem" },
+      { english: "Occur", turkish: "Meydana gelmek, olmak" },
+      { english: "Make possible", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
+      { english: "Enable", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
+      { english: "Simplify", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
     ];
 
     let roundWords = [];
     let currentIndex = 0;
     let score = 0;
     let wrongAnswers = [];
-    let roundNumber = 1;
+    let roundNumber = parseInt(localStorage.getItem("roundNumber")) || 1;
 
-    function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
-    }
-
-    // ✅ Verileri localStorage’a kaydet
-    function saveProgress() {
-      const progress = {
-        roundWords,
-        currentIndex,
-        score,
-        wrongAnswers,
-        roundNumber
-      };
-      localStorage.setItem("wordQuizProgress", JSON.stringify(progress));
-    }
-
-    // ✅ Kayıtlı verileri yükle
-    function loadProgress() {
-      const saved = localStorage.getItem("wordQuizProgress");
-      if (saved) {
-        const data = JSON.parse(saved);
-        roundWords = data.roundWords || [];
-        currentIndex = data.currentIndex || 0;
-        score = data.score || 0;
-        wrongAnswers = data.wrongAnswers || [];
-        roundNumber = data.roundNumber || 1;
-        return true;
-      }
-      return false;
-    }
+    function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
     function startNewRound() {
       roundWords = shuffle([...wordList]);
       currentIndex = 0;
       score = 0;
       wrongAnswers = [];
-
       document.getElementById("quizCard").style.display = "block";
       document.getElementById("resultPanel").style.display = "none";
-
-      saveProgress(); // başta kaydet
       loadQuestion();
     }
 
     function loadQuestion() {
       const question = roundWords[currentIndex];
       document.getElementById("question").innerText = question.english;
-
       const optionsDiv = document.getElementById("options");
       optionsDiv.innerHTML = "";
-
       const allOptions = shuffle([
         question.turkish,
         ...shuffle(wordList.filter(w => w.turkish !== question.turkish))
           .slice(0, 3)
           .map(w => w.turkish)
       ]);
-
       allOptions.forEach(opt => {
         const btn = document.createElement("button");
         btn.className = "option";
@@ -797,17 +164,14 @@
         btn.onclick = () => checkAnswer(btn, question.turkish);
         optionsDiv.appendChild(btn);
       });
-
       document.getElementById("progress").innerText =
         `Tur ${roundNumber} • ${currentIndex + 1} / ${roundWords.length}`;
-
       document.getElementById("nextBtn").style.display = "none";
     }
 
     function checkAnswer(button, correctAnswer) {
       const buttons = document.querySelectorAll(".option");
       buttons.forEach(b => b.disabled = true);
-
       if (button.innerText === correctAnswer) {
         button.classList.add("correct");
         score++;
@@ -819,15 +183,12 @@
           chosen: button.innerText
         });
       }
-
-      saveProgress(); // her cevap sonrası kaydet
       document.getElementById("nextBtn").style.display = "block";
     }
 
     document.getElementById("nextBtn").onclick = () => {
       currentIndex++;
       if (currentIndex < roundWords.length) {
-        saveProgress();
         loadQuestion();
       } else {
         showResults();
@@ -838,10 +199,8 @@
       document.getElementById("quizCard").style.display = "none";
       const panel = document.getElementById("resultPanel");
       panel.style.display = "flex";
-
       document.getElementById("score").innerText =
         `Skorun: ${score} / ${roundWords.length}`;
-
       const wrongListDiv = document.getElementById("wrongList");
       if (wrongAnswers.length === 0) {
         wrongListDiv.innerHTML = "<p>Tüm cevaplar doğru! 🎉</p>";
@@ -856,28 +215,25 @@
           wrongListDiv.appendChild(div);
         });
       }
-
-      saveProgress(); // sonuç da kaydedilsin
+      localStorage.setItem("roundNumber", roundNumber + 1);
     }
 
-    // 🧹 Kayıtlı ilerlemeyi tamamen sıfırla
+    document.getElementById("restartBtn").onclick = () => {
+      roundNumber++;
+      localStorage.setItem("roundNumber", roundNumber);
+      startNewRound();
+    };
+
+    // 🧹 Kayıt sıfırlama butonu
     document.getElementById("resetProgressBtn").onclick = () => {
-      if (confirm("Kayıtlı ilerlemeni silmek istediğine emin misin?")) {
-        localStorage.removeItem("wordQuizProgress");
+      if (confirm("Tüm ilerlemeyi sıfırlamak istiyor musun?")) {
+        localStorage.clear();
         alert("Kayıt sıfırlandı. Sayfa yenilenecek.");
         location.reload();
       }
     };
 
-    // 🚀 Sayfa açıldığında
-    window.onload = () => {
-      if (loadProgress() && roundWords.length > 0) {
-        loadQuestion();
-      } else {
-        startNewRound();
-      }
-    };
+    startNewRound();
   </script>
 </body>
 </html>
-
