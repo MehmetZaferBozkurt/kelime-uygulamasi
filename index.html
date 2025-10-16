@@ -102,6 +102,8 @@
     <p id="score"></p>
     <div id="wrongList"></div>
     <button class="restart-btn" id="restartBtn">Yeni Tura Başla</button>
+    <button class="restart-btn" id="resetProgressBtn" style="background:#e74c3c;">Kaydı Sıfırla</button>
+
   </div>
 
   <script>
@@ -863,6 +865,16 @@
       startNewRound();
     };
 
+    // 🚫 Kayıtlı ilerlemeyi tamamen sıfırla
+    document.getElementById("resetProgressBtn").onclick = () => {
+      if (confirm("Kayıtlı ilerlemeni silmek istediğine emin misin?")) {
+        localStorage.removeItem("wordQuizProgress"); // sadece bu uygulamanın kaydını siler
+        alert("Kayıt sıfırlandı. Sayfa yenilenecek.");
+        location.reload();
+      }
+    };
+
+    
     // 🚀 Sayfa açıldığında
     window.onload = () => {
       if (loadProgress() && roundWords.length > 0) {
@@ -876,3 +888,4 @@
   </script>
 </body>
 </html>
+
