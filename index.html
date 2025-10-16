@@ -102,7 +102,6 @@
     <p id="score"></p>
     <div id="wrongList"></div>
     <button class="restart-btn" id="restartBtn">Yeni Tura Başla</button>
-
   </div>
 
   <script>
@@ -722,7 +721,6 @@
           { english: "Enable", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
           { english: "Simplify", turkish: "Kolaylaştırmak, olanak sağlamak, rahatlamak" },
 
-      
     ];
 
     let roundWords = [];
@@ -858,11 +856,19 @@
 
       saveProgress(); // sonuç da kaydedilsin
     }
+
+    document.getElementById("restartBtn").onclick = () => {
+      roundNumber++;
+      startNewRound();
+    };
+
     // 🚀 Sayfa açıldığında
     window.onload = () => {
       if (loadProgress() && roundWords.length > 0) {
+        // Kayıt varsa oradan devam et
         loadQuestion();
       } else {
+        // Yoksa sıfırdan başla
         startNewRound();
       }
     };
